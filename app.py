@@ -383,8 +383,6 @@ assumptions = {
     'dividend_yield': dividend_yield,
     'property_appreciation': property_appreciation,
     'rent_growth': rent_growth,
-    'property_tax_rate': {},
-    'insurance_rate': {},
     'start_year': start_year,
     'end_year': end_year,
     'retirement_year': retirement_year,
