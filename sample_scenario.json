@@ -1,0 +1,101 @@
+{
+  "metadata": {
+    "description": "Sample scenario demonstrating FIRE planning",
+    "exported_at": "2026-01-01T00:00:00.000000",
+    "notes": "This is an example scenario with generic values. Replace with your own data."
+  },
+  "assumptions": {
+    "birth_year": 1990,
+    "filing_status": "Single",
+    "state": "Other",
+    "state_tax_rate": 0.05,
+    "current_salary": 100000,
+    "salary_growth": 0.03,
+    "contrib_401k": 23000,
+    "employer_401k": 5000,
+    "contrib_roth": 7000,
+    "contrib_hsa": 4150,
+    "employer_hsa": 0,
+    "contrib_brokerage": 10000,
+    "contrib_crypto": 0,
+    "cash_savings_rate": 0.10,
+    "annual_expenses": 40000,
+    "monthly_rent": 1500,
+    "inflation": 0.03,
+    "current_cash": 30000,
+    "current_portfolio": 50000,
+    "current_crypto": 0,
+    "current_401k": 100000,
+    "current_roth_balance": 25000,
+    "current_roth_contributions": 20000,
+    "roth_first_contrib_year": 2020,
+    "current_hsa": 10000,
+    "portfolio_return": 0.07,
+    "crypto_return": 0.10,
+    "dividend_yield": 0.02,
+    "property_appreciation": 0.03,
+    "rent_growth": 0.03,
+
+    "start_year": 2026,
+    "end_year": 2060,
+    "retirement_year": 2045
+  },
+  "properties": [
+    {
+      "name": "Example Primary Home",
+      "purchase_year": 2028,
+      "purchase_price": 350000,
+      "closing_costs": 10000,
+      "down_payment_pct": 0.20,
+      "mortgage_rate": 0.065,
+      "mortgage_years": 30,
+      "property_tax_rate": 0.012,
+      "is_primary": true,
+      "monthly_rent": 0,
+      "arv": 350000,
+      "repair_cost": 0,
+      "pmi_rate": 0,
+      "lender_points": 0,
+      "other_fees": 0,
+      "rent_per_unit": 0,
+      "num_units": 1,
+      "vacancy_rate": 0,
+      "avg_tenant_stay": 0,
+      "other_monthly_income": 0,
+      "insurance_monthly": 150,
+      "capex_rate": 0,
+      "management_rate": 0,
+      "hoa_monthly": 0,
+      "utilities_monthly": 0,
+      "other_monthly_expenses": 0
+    }
+  ],
+  "debts": [],
+  "financial_events": [
+    {
+      "type": "Roth Conversion (401k/IRA → Roth)",
+      "year": 2046,
+      "amount": 35000
+    },
+    {
+      "type": "Roth Conversion (401k/IRA → Roth)",
+      "year": 2047,
+      "amount": 35000
+    },
+    {
+      "type": "Roth Conversion (401k/IRA → Roth)",
+      "year": 2048,
+      "amount": 35000
+    },
+    {
+      "type": "Roth Conversion (401k/IRA → Roth)",
+      "year": 2049,
+      "amount": 35000
+    },
+    {
+      "type": "Roth Conversion (401k/IRA → Roth)",
+      "year": 2050,
+      "amount": 35000
+    }
+  ]
+}
