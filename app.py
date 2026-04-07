@@ -298,7 +298,7 @@ with st.sidebar:
         state_tax_rate = st.slider('State Income Tax Rate (%)', 0.0, 13.0, 5.0, 0.5, key='w_state_tax') / 100
     else:
         state_tax_rate = 0
-        st.info('🌴 SC Tax: 0% up to $3,560, 3% to $17,830, then 6% (2026+)')
+        st.info('🌴 SC Tax: 0% up to \$3,560, 3% to \$17,830, then 6% (2026+)')
     
     st.subheader('💼 Income')
     current_salary = st.number_input('Annual Gross Salary ($)', value=75000, step=5000, key='w_salary')
