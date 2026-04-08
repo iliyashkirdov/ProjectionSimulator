@@ -11,6 +11,7 @@ from calculations import (
     run_projection,
     calculate_federal_tax,
     calculate_sc_state_tax,
+    calculate_ma_state_tax,
     calculate_fica_tax,
     calculate_mortgage_payment,
     get_remaining_balance,
@@ -166,6 +167,41 @@ def test_sc_tax_top_bracket_2025():
     expected = (17830 - 3560) * 0.03 + (50000 - 17830) * 0.062
     assert close(tax, expected), f"Expected ${expected:.2f}, got ${tax:.2f}"
     print('test_sc_tax_top_bracket_2025: PASS')
+
+
+# ============================================
+# MA STATE TAX TESTS
+# ============================================
+
+def test_ma_tax_zero_bracket():
+    # Income below $8,000 = 0%
+    assert calculate_ma_state_tax(6000, 2026) == 0
+    assert calculate_ma_state_tax(8000, 2026) == 0
+    print('test_ma_tax_zero_bracket: PASS')
+
+
+def test_ma_tax_5pct_bracket():
+    # Income $10,000: $8,000 @0% + ($10,000 - $8,000) @5%
+    tax = calculate_ma_state_tax(10000, 2026)
+    expected = (10000 - 8000) * 0.05
+    assert close(tax, expected), f"Expected ${expected:.2f}, got ${tax:.2f}"
+    print('test_ma_tax_5pct_bracket: PASS')
+
+
+def test_ma_tax_top_bracket_2026():
+    # Income $2,000,000 in 2026 (top rate = 9.0%)
+    tax = calculate_ma_state_tax(2000000, 2026)
+    expected = (2000000 - 1083150) * 0.09 + (1083150 - 8000) * 0.05
+    assert close(tax, expected), f"Expected ${expected:.2f}, got ${tax:.2f}"
+    print('test_ma_tax_top_bracket_2026: PASS')
+
+
+def test_ma_tax_top_bracket_2024():
+    # Income $2,000,000 in 2025 (top rate = 9.0%)
+    tax = calculate_ma_state_tax(2000000, 2024)
+    expected = (2000000 - 1053750) * 0.09 + (1053750 - 8000) * 0.05
+    assert close(tax, expected), f"Expected ${expected:.2f}, got ${tax:.2f}"
+    print('test_sc_tax_top_bracket_2024: PASS')
 
 
 # ============================================
@@ -915,6 +951,19 @@ def test_sc_state_integration():
     print('test_sc_state_integration: PASS')
 
 
+def test_ma_state_integration():
+    pass
+    """SC state tax in full projection matches standalone calc."""
+    a = make_assumptions(
+        current_salary=100000, filing_status='Single',
+        state='MA', state_tax_rate=0,
+    )
+    r = run1(a)
+    expected = calculate_ma_state_tax(r['Taxable_Income'], 2026)
+    assert close(r['State_Tax'], expected, tol=1.0)
+    print('test_ma_state_integration: PASS')
+
+
 # ============================================
 # EDGE CASE TESTS
 # ============================================
@@ -1055,6 +1104,11 @@ def run_all():
         test_sc_tax_3pct_bracket,
         test_sc_tax_top_bracket_2026,
         test_sc_tax_top_bracket_2025,
+        # MA state tax
+        test_ma_tax_zero_bracket,
+        test_ma_tax_5pct_bracket,
+        test_ma_tax_top_bracket_2026,
+        test_ma_tax_top_bracket_2024,
         # FICA
         test_fica_below_ss_cap,
         test_fica_above_ss_cap,
@@ -1123,6 +1177,7 @@ def run_all():
         test_no_income_tax_state,
         test_other_state_flat_rate,
         test_sc_state_integration,
+        test_ma_state_integration,
         # Edge cases
         test_zero_everything,
         test_very_high_income,
