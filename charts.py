@@ -325,6 +325,11 @@ def render_taxes_tab(results, assumptions):
         - **401(k) & HSA** reduce your **Federal & SC state taxable income** (big tax savings!)
         - **FICA taxes** (SS + Medicare) are on **gross salary** - NOT reduced by 401k/HSA
         """)
+    elif assumptions.get('state') == 'MA':
+        st.markdown("""
+        **💵 Massachusetts Tax Info:**
+        MA Tax Brackets (2026): 0% up to \$8,000, 5% to \$1,083,150, then 9% (2026+)
+        """)
     else:
         st.markdown("""
         **How Pre-Tax Contributions Work:**
