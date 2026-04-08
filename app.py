@@ -121,6 +121,39 @@ if 'just_imported' not in st.session_state:
 # ============================================
 # SAVE / LOAD SCENARIOS
 # ============================================
+def loadAssumptions(a):
+    for key, widget_key in [
+        ('filing_status', 'w_filing_status'), ('state', 'w_state'),
+        ('birth_year', 'w_birth_year'), ('current_salary', 'w_salary'),
+        ('salary_growth', 'w_salary_growth'), ('contrib_401k', 'w_401k_contrib'),
+        ('employer_401k', 'w_401k_employer'), ('contrib_roth', 'w_roth_contrib'),
+        ('contrib_hsa', 'w_hsa_contrib'), ('employer_hsa', 'w_hsa_employer'),
+        ('contrib_brokerage', 'w_brokerage_contrib'), ('contrib_crypto', 'w_crypto_contrib'),
+        ('annual_expenses', 'w_expenses'), ('monthly_rent', 'w_rent'),
+        ('cash_savings_rate', 'w_cash_savings'),
+        ('current_cash', 'w_cash'), ('current_portfolio', 'w_portfolio'),
+        ('current_crypto', 'w_crypto'), ('current_401k', 'w_401k'),
+        ('current_roth_balance', 'w_roth_balance'),
+        ('current_roth_contributions', 'w_roth_contributions'),
+        ('roth_first_contrib_year', 'w_roth_first_year'),
+        ('current_hsa', 'w_hsa'),
+        ('portfolio_return', 'w_portfolio_return'), ('crypto_return', 'w_crypto_return'),
+        ('dividend_yield', 'w_dividend_yield'),
+        ('property_appreciation', 'w_appreciation'), ('rent_growth', 'w_rent_growth'),
+        ('start_year', 'w_start_year'), ('end_year', 'w_end_year'),
+        ('retirement_year', 'w_retirement_year'),
+    ]:
+        if key in a:
+            val = a[key]
+            if key in ('salary_growth', 'inflation', 'portfolio_return', 'dividend_yield',
+                        'property_appreciation', 'rent_growth', 'crypto_return'):
+                val = val * 100 if val < 1 else val
+            if key == 'cash_savings_rate':
+                val = int(val * 100) if val < 1 else int(val)
+            if key == 'inflation':
+                val = val * 100 if val < 1 else val
+            st.session_state[widget_key] = val        
+
 with st.expander('💾 Save / Load Scenarios', False):
     col1, col2, col3 = st.columns((2, 2, 2))
     
@@ -141,8 +174,7 @@ with st.expander('💾 Save / Load Scenarios', False):
                     loaded = load_scenario(selected_scenario)
                     if loaded:
                         if 'assumptions' in loaded:
-                            for key, val in loaded['assumptions'].items():
-                                st.session_state[f'w_{key}'] = val
+                            loadAssumptions(loaded['assumptions'])
                         if 'properties' in loaded:
                             st.session_state.properties = loaded['properties']
                         if 'debts' in loaded:
@@ -204,47 +236,7 @@ if st.session_state.get('just_imported'):
     if 'import_data' in st.session_state:
         loaded = st.session_state.import_data
         a = loaded.get('assumptions', {})
-        
-        filing_options = ('Single', 'Married Filing Jointly', 'Married Filing Separately', 'Head of Household')
-        if a.get('filing_status') in filing_options:
-            st.session_state.w_filing_status = filing_options.index(a['filing_status'])
-        
-        state_options = ('SC', 'No Income Tax (TX, FL, WA, etc.)', 'Other')
-        if a.get('state') in state_options:
-            st.session_state.w_state = state_options.index(a['state'])
-        
-        for key, widget_key in [
-            ('birth_year', 'w_birth_year'), ('current_salary', 'w_salary'),
-            ('salary_growth', 'w_salary_growth'), ('contrib_401k', 'w_401k_contrib'),
-            ('employer_401k', 'w_401k_employer'), ('contrib_roth', 'w_roth_contrib'),
-            ('contrib_hsa', 'w_hsa_contrib'), ('employer_hsa', 'w_hsa_employer'),
-            ('contrib_brokerage', 'w_brokerage_contrib'), ('contrib_crypto', 'w_crypto_contrib'),
-            ('annual_expenses', 'w_expenses'), ('monthly_rent', 'w_rent'),
-            ('cash_savings_rate', 'w_cash_savings'),
-            ('current_cash', 'w_cash'), ('current_portfolio', 'w_portfolio'),
-            ('current_crypto', 'w_crypto'), ('current_401k', 'w_401k'),
-            ('current_roth_balance', 'w_roth_balance'),
-            ('current_roth_contributions', 'w_roth_contributions'),
-            ('roth_first_contrib_year', 'w_roth_first_year'),
-            ('current_hsa', 'w_hsa'),
-            ('portfolio_return', 'w_portfolio_return'), ('crypto_return', 'w_crypto_return'),
-            ('dividend_yield', 'w_dividend_yield'),
-            ('property_appreciation', 'w_appreciation'), ('rent_growth', 'w_rent_growth'),
-            ('start_year', 'w_start_year'), ('end_year', 'w_end_year'),
-            ('retirement_year', 'w_retirement_year'),
-        ]:
-            if key in a:
-                val = a[key]
-                if key in ('salary_growth', 'inflation', 'portfolio_return', 'dividend_yield',
-                           'property_appreciation', 'rent_growth', 'crypto_return'):
-                    val = val * 100 if val < 1 else val
-                if key == 'cash_savings_rate':
-                    val = int(val * 100) if val < 1 else int(val)
-                st.session_state[widget_key] = val
-        
-        if 'inflation' in a:
-            val = a['inflation']
-            st.session_state.w_inflation = val * 100 if val < 1 else val
+        loadAssumptions(a)
         
         if 'properties' in loaded:
             st.session_state.properties = loaded['properties']
