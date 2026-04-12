@@ -158,7 +158,7 @@ def calculate_ma_state_tax(taxable_income, year):
         # Income in bracket1 at normal rate
         tax += (bracket2 - bracket1) * normal_rate
     elif taxable_income > bracket1:
-        # Income in bracket1 at normal rate at normal rate
+        # Income in bracket1 at normal rate
         tax += (taxable_income - bracket1) * normal_rate
     # else: income is in 0% bracket
     

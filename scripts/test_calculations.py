@@ -953,7 +953,7 @@ def test_sc_state_integration():
 
 def test_ma_state_integration():
     pass
-    """SC state tax in full projection matches standalone calc."""
+    """MA state tax in full projection matches standalone calc."""
     a = make_assumptions(
         current_salary=100000, filing_status='Single',
         state='MA', state_tax_rate=0,
