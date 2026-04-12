@@ -141,17 +141,16 @@ def loadAssumptions(a):
         ('dividend_yield', 'w_dividend_yield'),
         ('property_appreciation', 'w_appreciation'), ('rent_growth', 'w_rent_growth'),
         ('start_year', 'w_start_year'), ('end_year', 'w_end_year'),
-        ('retirement_year', 'w_retirement_year'),
+        ('retirement_year', 'w_retirement_year'), ('inflation', 'w_inflation'),
+        ('state_tax_rate', 'w_state_tax')
     ]:
         if key in a:
             val = a[key]
             if key in ('salary_growth', 'inflation', 'portfolio_return', 'dividend_yield',
-                        'property_appreciation', 'rent_growth', 'crypto_return'):
+                        'property_appreciation', 'rent_growth', 'crypto_return', 'state_tax_rate'):
                 val = val * 100 if val < 1 else val
             if key == 'cash_savings_rate':
                 val = int(val * 100) if val < 1 else int(val)
-            if key == 'inflation':
-                val = val * 100 if val < 1 else val
             st.session_state[widget_key] = val        
 
 with st.expander('💾 Save / Load Scenarios', False):
