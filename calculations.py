@@ -125,6 +125,44 @@ def calculate_sc_state_tax(taxable_income, year):
     
     return tax
 
+def calculate_ma_state_tax(taxable_income, year):
+    """
+    Calculate Massachusetts state income tax.
+    """
+    if taxable_income <= 0:
+        return 0
+    
+    # MA tax rates from 2025 (same for all filing statuses)
+    normal_rate = 0.05
+    millionaires_surtax = 0.04
+    
+    # MA 2025 brackets
+    # $0 - $8,000        : 0%
+    # $8,000 - $1,083,150: 5% (upper end varies by year)
+    # $1,083,150+        : 9%
+    bracket1 = 8000 
+    
+    bracket2 = 0
+    if year == 2023:
+        bracket2 = 1000000
+    elif year == 2024:
+        bracket2 = 1053750
+    elif year >= 2025:
+        bracket2 = 1083150
+    
+    tax = 0
+    
+    if (taxable_income > bracket2) and (year >= 2023):
+        # Income > bracket2 at highest rate
+        tax += (taxable_income - bracket2) * (millionaires_surtax + normal_rate)
+        # Income in bracket1 at normal rate
+        tax += (bracket2 - bracket1) * normal_rate
+    elif taxable_income > bracket1:
+        # Income in bracket1 at normal rate
+        tax += (taxable_income - bracket1) * normal_rate
+    # else: income is in 0% bracket
+    
+    return tax
 
 def calculate_fica_tax(gross_income):
     """Calculate Social Security and Medicare taxes - returns (ss_tax, medicare_tax, total)"""
@@ -508,6 +546,8 @@ def run_projection(assumptions, properties, debts, financial_events=None):
         state = assumptions.get('state', 'SC')
         if state == 'SC':
             est_state_tax = calculate_sc_state_tax(max(0, agi - std_deduction_base), year)
+        elif state == 'MA':
+            est_state_tax = calculate_ma_state_tax(max(0, agi - std_deduction_base), year)
         else:
             est_state_tax = max(0, agi - std_deduction_base) * assumptions.get('state_tax_rate', 0.05)
         
@@ -534,6 +574,8 @@ def run_projection(assumptions, properties, debts, financial_events=None):
         # State tax - South Carolina uses federal taxable income as starting point
         if state == 'SC':
             state_tax = calculate_sc_state_tax(taxable_income, year)
+        elif state == 'MA':
+            state_tax = calculate_ma_state_tax(taxable_income, year)
         else:
             state_tax = max(0, taxable_income) * assumptions.get('state_tax_rate', 0.05)
         
@@ -558,6 +600,8 @@ def run_projection(assumptions, properties, debts, financial_events=None):
             federal_without_events = calculate_federal_tax(taxable_without_events, assumptions.get('filing_status', 'Married Filing Jointly'))
             if state == 'SC':
                 state_without_events = calculate_sc_state_tax(taxable_without_events, year)
+            elif state == 'MA':
+                state_without_events = calculate_ma_state_tax(taxable_without_events, year)
             else:
                 state_without_events = taxable_without_events * assumptions.get('state_tax_rate', 0.05)
             event_income_tax = (federal_tax - federal_without_events) + (state_tax - state_without_events)
@@ -572,6 +616,8 @@ def run_projection(assumptions, properties, debts, financial_events=None):
         federal_without_pretax = calculate_federal_tax(taxable_without_pretax, assumptions.get('filing_status', 'Married Filing Jointly'))
         if state == 'SC':
             state_without_pretax = calculate_sc_state_tax(taxable_without_pretax, year)
+        elif state == 'MA':
+            state_without_pretax = calculate_ma_state_tax(taxable_without_pretax, year)
         else:
             state_without_pretax = taxable_without_pretax * assumptions.get('state_tax_rate', 0.05)
         tax_savings_from_pretax = (federal_without_pretax - federal_without_events if taxable_event_income > 0 else federal_without_pretax - federal_tax) + (state_without_pretax - (state_without_events if taxable_event_income > 0 else state_tax))

@@ -279,7 +279,7 @@ with st.sidebar:
     filing_options = ('Single', 'Married Filing Jointly', 'Married Filing Separately', 'Head of Household')
     filing_status = st.selectbox('Tax Filing Status', filing_options, index=1, key='w_filing_status')
     
-    state_options = ('SC', 'No Income Tax (TX, FL, WA, etc.)', 'Other')
+    state_options = ('SC', 'MA', 'No Income Tax (TX, FL, WA, etc.)', 'Other')
     state = st.selectbox('State', state_options, index=0, key='w_state')
     
     if state == 'No Income Tax (TX, FL, WA, etc.)':
@@ -287,6 +287,9 @@ with st.sidebar:
         st.info('🎉 No state income tax! (TX, FL, WA, NV, WY, SD, AK, NH, TN)')
     elif state == 'Other':
         state_tax_rate = st.slider('State Income Tax Rate (%)', 0.0, 13.0, 5.0, 0.5, key='w_state_tax') / 100
+    elif state == 'MA':
+        state_tax_rate = 0
+        st.info('💵 MA Tax: 0% up to \$8,000, 5% to \$1,083,150, then 9% (2026+)')
     else:
         state_tax_rate = 0
         st.info('🌴 SC Tax: 0% up to \$3,560, 3% to \$17,830, then 6% (2026+)')
