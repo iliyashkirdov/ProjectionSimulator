@@ -318,7 +318,7 @@ def render_taxes_tab(results, assumptions):
         st.markdown("""
         **🌴 South Carolina Tax Info:**
         - **SC uses federal taxable income** as the starting point (after standard deduction)
-        - **SC Tax Brackets (2026)**: 0% up to $3,560 → 3% up to $17,830 → **6%** above
+        - **SC Tax Brackets (2026)**: 0% up to \$3,560 → 3% up to \$17,830 → **6%** above
         - **Federal 2026 Brackets**: 10% → 12% → 22% → 24% → 32% → 35% → 37%
         
         **How Pre-Tax Contributions Work:**
